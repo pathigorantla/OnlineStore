@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	<import resource="security-config.xml" /> 
+	<!-- Enables the Spring MVC @Controller programming model -->
+    
+	<context:component-scan base-package="com.ritekart.serviceImpl,com.ritekart.controller" >
+		<!-- <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController" />  -->
+	</context:component-scan>
+ 	<context:annotation-config/> 
+ 	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url"
+            value="jdbc:mysql://localhost:3306/affablebean" />
+        <!--  <property name="connection.pool_size" value="1"/> -->
+        <property name="username" value="root" />
+        <property name="password" value="" />
+    </bean>
+ 
+    <!-- Hibernate 3 Annotation SessionFactory Bean definition-->
+    <bean id="hibernate3AnnotatedSessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>com.ritekart.model.Category</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+     
+    <bean id="categoryDAO" class="com.ritekart.daoImpl.CategoryDAOImpl">
+        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
+    </bean>
+    <bean id="categoryService" class="com.ritekart.serviceImpl.CategoryServiceImpl" >
+        <property name="categoryDAO" ref="categoryDAO"></property>
+    </bean>
+    <bean id="loginDAO" class="com.ritekart.daoImpl.LoginDAOImpl">
+        
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+     
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
+    </bean>
+	    <bean id="storeFrontController" class="com.ritekart.controller.StoreFrontController" scope="prototype" >
+    	<property name="categoryService" ref="categoryService"></property>
+    </bean>
+    
+    
+</beans>

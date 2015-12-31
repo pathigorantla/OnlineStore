@@ -1,0 +1,54 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="RiteKart.css"/>
+	<link href="http://code.jquery.com/ui/1.10.4/themes/south-street/jquery-ui.css" rel="stylesheet">
+	<link rel="stylesheet" href="ouibounce.min.css">
+	
+      <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+      <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+      <script src="ouibounce.js"></script>
+     <!--   <script src="ritekart.js" type="text/javascript"></script> -->
+      
+      
+     
+      <script >
+      $(function(){
+    	  var Categories = ["meat","met","migra","dairy","drake", "diapers","meaning"];
+    	  $("#autocomplete").autocomplete({source: Categories});
+    	  $("#autocomplete").autocomplete({autofocus : true});
+    	  $("#autocomplete").autocomplete({position : {my : "right top", at : "right bottom"}});
+      });
+      
+     
+      </script>
+      
+<title>RiteKart Online Grocery Store</title>
+
+</head>
+<body>
+	<div id="main">
+		<div id="header">
+			<div id="widgetBar">
+				<div class="headerWidget">
+					[language toggle]
+				</div>
+				<div class="headerWidget">
+					[shopping cart widget]
+				</div>
+			</div>
+			<div class="ui-autocomplete-widget">
+				<label for="autocomplete">Category:</label>
+				<input id="autocomplete">
+			</div>
+			<div id="browser"></div>
+			
+			<a href="#">
+				<img id="logo" alt="RiteKart Logo" src="#">
+			</a>
+			
+			<img id="logoText" alt="RiteKart" src="#">
+		</div>
